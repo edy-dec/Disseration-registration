@@ -4,7 +4,7 @@ Această aplicație web permite gestionarea procesului de înscriere la diserta�
 
 ## 🚀 Funcționalități principale
 
-## 🔧 Coming Soon...
+#### 🔧 Coming Soon...
 
 ### 👨‍🎓 Pentru Studenți:
 
@@ -27,7 +27,7 @@ Această aplicație web permite gestionarea procesului de înscriere la diserta�
 
 ## 📂 Structura proiectului
 
-## 🔧 Coming Soon...
+#### 🔧 Coming Soon...
 
 ## 🛠️ Tehnologii recomandate
 
@@ -42,6 +42,4 @@ Această aplicație web permite gestionarea procesului de înscriere la diserta�
 
 ## 🔧 Instalare & Rulare
 
-## 🔧 Coming Soon...
-
-s
+#### 🔧 Coming Soon...
