@@ -53,7 +53,6 @@ const Navigation = () => {
   );
 };
 
-// Componente simple pentru demo
 const About = () => (
   <div className="container">
     <h2>About Page</h2>
@@ -76,6 +75,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </div>
       </Router>
