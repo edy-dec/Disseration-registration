@@ -1,4 +1,4 @@
-/* Resetare simplă pentru a scoate marginile implicite ale browserului */
+/* Resetare simplă */
 * {
   margin: 0;
   padding: 0;
@@ -6,58 +6,185 @@
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f4f4;
+  font-family: "Segoe UI", "Roboto", Helvetica, Arial, sans-serif;
+  background-color: #f0f2f5; /* Un gri foarte deschis, modern */
+  color: #333;
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
-/* --- NAVBAR STYLES --- */
-
-/* Containerul principal al navigării */
+/* --- NAVBAR STYLES (Păstrate) --- */
 .navbar {
-  background-color: #2c3e50; /* Culoare închisă (Dark Blue) */
+  background-color: #2c3e50;
   padding: 0 2rem;
   height: 60px;
   display: flex;
-  justify-content: space-between; /* Separă logo-ul de link-uri */
+  justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Umbră subtilă */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-/* Logo-ul (opțional, dar arată bine) */
 .logo {
   color: #fff;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 700;
   text-decoration: none;
+  letter-spacing: 1px;
 }
 
-/* Lista de link-uri (ul) */
 .nav-links {
   display: flex;
-  list-style: none; /* Scoate bulinele */
-  gap: 30px; /* Spațiu între link-uri */
+  list-style: none;
+  gap: 20px;
 }
 
-/* Link-urile individuale (a) */
 .nav-link {
-  color: #ecf0f1; /* Alb murdar */
-  text-decoration: none; /* Scoate sublinierea */
-  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 1rem;
   font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: all 0.3s ease; /* Animație fină la hover */
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
-/* Efectul când pui mouse-ul peste link */
 .nav-link:hover {
-  background-color: #34495e; /* Puțin mai deschis decât fundalul */
-  color: #3498db; /* Albastru deschis */
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
-/* Stil pentru conținutul paginii (ca să nu fie lipit de margine) */
+/* Stiluri speciale pentru containerul paginii */
 .container {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* --- AUTH FORMS STYLES (LOGIN & REGISTER) --- */
+
+/* Cardul principal */
+.auth-container {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  margin: 3rem auto; /* Centrat orizontal cu spațiu sus */
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Umbră fină și modernă */
+  border: 1px solid #eee;
+}
+
+/* Titlul form-ului */
+.auth-container h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Structura formularului */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; /* Spațiu egal între elemente */
+}
+
+/* Grupul Label + Input */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Input-urile */
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px; /* Colțuri mai rotunjite */
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+/* Efect când dai click în input */
+.form-group input:focus {
+  border-color: #3498db;
+  background-color: #fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15); /* Halou albastru */
+}
+
+/* Butonul Principal */
+.btn-primary {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+
+.btn-primary:active {
+  transform: scale(0.98); /* Efect de apăsare */
+}
+
+/* Mesajele de eroare */
+.error-message {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fee2e2;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Butonul de Logout din Navbar (Specific) */
+.btn-logout {
+  background: transparent;
+  border: 1px solid rgba(231, 76, 60, 0.5);
+  color: #e74c3c !important;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.btn-logout:hover {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: white !important;
+}
+
+/* Responsive pentru mobil */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 1rem;
+  }
+
+  .auth-container {
+    margin: 1rem auto;
+    padding: 1.5rem;
+    box-shadow: none; /* Pe mobil scoatem umbra mare */
+    border: 1px solid #eee;
+  }
 }
