@@ -4,7 +4,6 @@ Această aplicație web permite gestionarea procesului de înscriere la diserta�
 
 ## 🚀 Funcționalități principale
 
-#### 🔧 Coming Soon...
 
 ### 👨‍🎓 Pentru Studenți:
 
@@ -29,7 +28,7 @@ Această aplicație web permite gestionarea procesului de înscriere la diserta�
 
 #### 🔧 Coming Soon...
 
-## 🛠️ Tehnologii recomandate
+## 🛠️ Tehnologii
 
 - **Frontend**: React
 - **Backend**: Node.js
