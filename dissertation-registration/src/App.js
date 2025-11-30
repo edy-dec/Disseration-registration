@@ -5,16 +5,18 @@ import "./App.css";
 import Home from "./views/Home";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ProfileCompletion from "./components/auth/ProfileCompletion";
 
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 
 const Navigation = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
 
   return (
     <nav className="navbar">
       <Link to="/" className="logo">
-        My App
+        Dissertation App
       </Link>
       <ul className="nav-links">
         <li>
@@ -23,10 +25,10 @@ const Navigation = () => {
           </Link>
         </li>
 
-        {user ? (
+        {isAuthenticated ? (
           <>
             <li style={{ color: "white", alignSelf: "center" }}>
-              Salut, {user.name}
+              Salut, {user?.name} ({user?.userType})
             </li>
             <li>
               <button onClick={logout} className="nav-link btn-logout">
@@ -58,6 +60,7 @@ const About = () => (
     <h2>About Page</h2>
   </div>
 );
+
 const Contact = () => (
   <div className="container">
     <h2>Contact Page</h2>
@@ -72,16 +75,46 @@ function App() {
 
         <div className="container">
           <Routes>
-            <Route path="/" element={<Home />} />
+            {/* Rute publice */}
             <Route path="/login" element={<Login />} />
-            <Route path="/about" element={<About />} />
-
             <Route path="/register" element={<Register />} />
-            <Route path="/contact" element={<Contact />} />
+
+            {/* Rute protejate */}
+            <Route 
+              path="/" 
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/complete-profile" 
+              element={
+                <ProtectedRoute>
+                  <ProfileCompletion />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/about" 
+              element={
+                <ProtectedRoute>
+                  <About />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/contact" 
+              element={
+                <ProtectedRoute>
+                  <Contact />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </div>
-      </Router>
-    </AuthProvider>
+      </Router>    </AuthProvider>
   );
 }
 
