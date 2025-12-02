@@ -2,19 +2,13 @@ import "dotenv/config";
 
 import express from "express";
 import mongoose from "mongoose";
-<<<<<<< HEAD
-import { connectDB } from "./utilities/dbManager.js";
-=======
+import { connectDB } from "./utils/dbManager.js";
 import cors from "cors";
->>>>>>> d07daec1e404507236266bce4e045204607d8f95
 
 // Import rute
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 
-<<<<<<< HEAD
-connectDB(uri);
-=======
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -31,10 +25,12 @@ if (!process.env.JWT_SECRET) {
 }
 
 // Middleware
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
@@ -55,7 +51,7 @@ app.get("/api/health", (req, res) => {
     success: true,
     message: "Server funcționează corect",
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || "development"
+    environment: process.env.NODE_ENV || "development",
   });
 });
 
@@ -64,18 +60,18 @@ app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: "Ruta nu a fost găsită",
-    path: req.originalUrl
+    path: req.originalUrl,
   });
 });
 
 // Middleware pentru gestionarea erorilor
 app.use((error, req, res, next) => {
   console.error("Eroare neașteptată:", error);
-  
+
   res.status(500).json({
     success: false,
     message: "Eroare internă de server",
-    error: process.env.NODE_ENV === "development" ? error.message : undefined
+    error: process.env.NODE_ENV === "development" ? error.message : undefined,
   });
 });
 
@@ -83,10 +79,10 @@ app.use((error, req, res, next) => {
 async function startServer() {
   try {
     console.log("⏳ Încerc conectarea la MongoDB...");
-      await mongoose.connect(MONGO_URI);
-    
+    await mongoose.connect(MONGO_URI);
+
     console.log("✅ Conexiune MongoDB REUȘITĂ!");
-    
+
     // Porneste serverul
     app.listen(PORT, () => {
       console.log(`🚀 Serverul rulează pe portul ${PORT}`);
@@ -95,7 +91,6 @@ async function startServer() {
       console.log(`👥 API Users: http://localhost:${PORT}/api/users`);
       console.log("\n🎉 SERVERUL ESTE GATA DE FOLOSIRE!");
     });
-    
   } catch (error) {
     console.error("\n❌ EROARE la pornirea serverului:");
     console.error(error);
@@ -103,10 +98,9 @@ async function startServer() {
   }
 }
 
-
 process.on("SIGINT", async () => {
   console.log("\n⏳ Închid serverul...");
-  
+
   try {
     await mongoose.connection.close();
     console.log("✅ Conexiunea MongoDB a fost inchisa");
@@ -118,4 +112,3 @@ process.on("SIGINT", async () => {
 });
 
 startServer();
->>>>>>> d07daec1e404507236266bce4e045204607d8f95
