@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "./AuthContext.js";
 import { useNavigate } from "react-router-dom";
+import Auth0LoginButton from "./Auth0LoginButton";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -57,11 +58,37 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-        </div>
-        <button type="submit" className="btn-primary">
-          Login
+        </div>        <button type="submit" className="btn-primary">
+          Login Clasic
         </button>
       </form>
+      
+      <div style={{ 
+        margin: '2rem 0', 
+        textAlign: 'center', 
+        color: '#666',
+        position: 'relative'
+      }}>
+        <hr style={{ margin: '1rem 0', border: 'none', borderTop: '1px solid #eee' }} />
+        <span style={{ 
+          background: 'white', 
+          padding: '0 1rem', 
+          fontSize: '14px',
+          position: 'absolute',
+          top: '-10px',
+          left: '50%',
+          transform: 'translateX(-50%)'
+        }}>
+          sau
+        </span>
+      </div>
+      
+      <div style={{ textAlign: 'center' }}>
+        <p style={{ marginBottom: '1rem', color: '#666', fontSize: '14px' }}>
+          Autentificare rapidă cu Auth0
+        </p>
+        <Auth0LoginButton />
+      </div>
     </div>
   );
 };

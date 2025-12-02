@@ -7,6 +7,7 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ProfileCompletion from "./components/auth/ProfileCompletion";
+import Auth0Integration from "./auth/Auth0Integration";
 
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 
@@ -42,10 +43,14 @@ const Navigation = () => {
               <Link to="/login" className="nav-link">
                 Login
               </Link>
-            </li>
-            <li>
+            </li>            <li>
               <Link to="/register" className="nav-link">
                 Register
+              </Link>
+            </li>
+            <li>
+              <Link to="/auth0-demo" className="nav-link" style={{color: '#63b3ed'}}>
+                🚀 Auth0 Demo
               </Link>
             </li>
           </>
@@ -74,10 +79,10 @@ function App() {
         <Navigation />
 
         <div className="container">
-          <Routes>
-            {/* Rute publice */}
+          <Routes>            {/* Rute publice */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/auth0-demo" element={<Auth0Integration />} />
 
             {/* Rute protejate */}
             <Route 
