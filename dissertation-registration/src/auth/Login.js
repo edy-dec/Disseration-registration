@@ -11,28 +11,22 @@ const Login = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      // --- AICI LEGI DE BACKEND ---
-      // const response = await fetch('http://localhost:5000/api/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // });
-      // const data = await response.json();
-
-      // SIMULARE SUCCES (Sterge liniile astea cand ai backend)
-      const data = { token: "abc-123-jwt-fake", user: { name: "Student" } };
-
-      if (data.token) {
-        login(data.token, data.user);
-        navigate("/"); // Redirecționează către Home
+      const result = await login(formData);
+      
+      if (result.success) {
+        // Login reușit - redirecționează
+        if (result.data.requiresProfileCompletion) {
+          navigate("/complete-profile");
+        } else {
+          navigate("/");
+        }
       } else {
-        setError("Date de logare invalide");
+        setError(result.message || "Date de logare invalide");
       }
     } catch (err) {
       setError("Eroare la server.");
