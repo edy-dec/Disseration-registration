@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import express from "express";
 import mongoose from "mongoose";
-import { connectDB } from "./utils/dbManager.js";
+
 import cors from "cors";
 
 // Import rute
