@@ -1,43 +1,47 @@
-# ��� Dissertation Registration System - PostgreSQL
+# 🎓 Disseration Registration Single Page Application
 
-A complete web application for student and teacher dissertation registration with email domain validation, built with **React** frontend and **Node.js + PostgreSQL** backend.
+O aplicație web completă pentru înregistrarea studenților și profesorilor, cu validarea domeniilor de email și panouri dedicate rolului utilizatorului. Dezvoltată cu React pe frontend și Node.js + PostgreSQL pe backend.
 
-## ✅ Key Features
+## ✅ Funcționalități principale
 
-### ��� Authentication & Authorization
-- **Email Domain Validation**: Automatic user type detection based on educational email domains
-- **Secure Registration**: Password hashing with bcrypt
-- **JWT Authentication**: Token-based session management
-- **Role-Based Access**: Student and Professor dashboards
-- **Protected Routes**: Authentication-required pages
+### 🔐 Autentificare & Autorizare
+- Validarea domeniului de email cu detectarea automată a rolului (student/profesor)
+- Înregistrare securizată cu criptarea parolelor (bcrypt)
+- Autentificare bazată pe token JWT
+- Dashboard-uri diferite pentru studenți și profesori
+- Rute protejate, accesibile doar după autentificare
 
-### ��� Database & Backend
-- **PostgreSQL Database**: Modern, scalable relational database with Sequelize ORM
-- **RESTful API**: Clean, documented API endpoints
-- **Input Validation**: Comprehensive request validation with express-validator
-- **Error Handling**: Graceful error responses
-- **Production Ready**: Azure deployment configured
+### 🗄️ Bază de Date & Backend
+- Bază de date PostgreSQL (ORM: Sequelize)
+- API RESTful complet
+- Validarea inputului cu express-validator
+- Gestionarea centralizată a erorilor
+- Configurat pentru producție pe Microsoft Azure
 
-### ��� Frontend
-- **React 18**: Modern React with hooks and context
-- **Responsive Design**: Mobile-first UI
-- **Real-time Validation**: Instant feedback on forms
-- **Dashboard System**: Role-specific interfaces
-- **API Integration**: Axios-based API communication
+### 💻 Frontend
+- React 18 cu hooks și context
+- Design responsive pentru mobil
+- Validare în timp real în formulare
+- Interfețe separate în funcție de rol
+- Comunicare cu API folosind Axios
 
-## ��� Quick Start
+## 🚀 Pornire Rapidă
 
-### Prerequisites
+### Cerințe
 - Node.js 18+
 - PostgreSQL 15+
-- npm or yarn
+- npm sau yarn
 
-### 1. Backend Setup
+### 1️⃣ Configurare Backend
+
 ```bash
 cd backend
 npm install
+```
 
-# Create .env file with PostgreSQL config
+Creează fișierul `.env` cu configurarea bazei de date:
+
+```env
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=dissertation_registration_dev
@@ -46,132 +50,129 @@ DB_PASSWORD=your-password
 JWT_SECRET=your-super-secure-jwt-secret
 PORT=5000
 FRONTEND_URL=http://localhost:3000
+```
 
+Pornește serverul:
+
+```bash
 npm start
 ```
 
-### 2. Frontend Setup
+### 2️⃣ Configurare Frontend
+
 ```bash
 cd dissertation-registration
 npm install
+```
 
-# Create .env file
+Creează fișierul `.env`:
+
+```bash
 echo "REACT_APP_API_URL=http://localhost:5000" > .env
+```
 
+Pornește aplicația:
+
+```bash
 npm start
 ```
 
-### 3. Access Application
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
-- Health Check: http://localhost:5000/api/health
+### 3️⃣ Accesare Aplicație
 
-## ��� Email Domain Validation
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **API Backend**: [http://localhost:5000](http://localhost:5000)
+- **Health Check**: [http://localhost:5000/api/health](http://localhost:5000/api/health)
 
-### Student Domains
-- @stud.ase.ro, @student.ase.ro (ASE)
-- @student.upt.ro (UPT), @student.utcluj.ro (UTC)
-- @stud.ubbcluj.ro (UBB), @student.upb.ro (UPB)
+## 📧 Validarea Domeniului de Email
 
-### Professor Domains  
-- @ase.ro, @ie.ase.ro (ASE)
-- @upt.ro (UPT), @utcluj.ro (UTC)
-- @ubbcluj.ro (UBB), @upb.ro (UPB)
+### Domenii Studenți
+- `@stud.ase.ro` / `@student.ase.ro` (ASE)
+- `@student.upt.ro` (UPT)
+- `@student.utcluj.ro` (UTC)
+- `@stud.ubbcluj.ro` (UBB)
+- `@student.upb.ro` (UPB)
 
-## ��� API Endpoints
+### Domenii Profesori
+- `@ase.ro` / `@ie.ase.ro` (ASE)
+- `@upt.ro` (UPT)
+- `@utcluj.ro` (UTC)
+- `@ubbcluj.ro` (UBB)
+- `@upb.ro` (UPB)
 
-### Authentication
-- POST /api/auth/register - User registration
-- POST /api/auth/login - User login
-- GET /api/auth/verify - Token validation
-- GET /api/auth/profile - User profile
-- PUT /api/auth/complete-profile - Profile completion
+## 🔗 API Endpoints
 
-### Users
-- GET /api/users/students - All students (protected)
-- GET /api/users/professors - All professors (protected)
-- GET /api/users/me - Current user (protected)
+### Autentificare
+- `POST /api/auth/register` — Înregistrare utilizator
+- `POST /api/auth/login` — Autentificare
+- `GET /api/auth/verify` — Verificare token
+- `GET /api/auth/profile` — Date utilizator autentificat
+- `PUT /api/auth/complete-profile` — Finalizare profil
 
-## ���️ PostgreSQL Database
+### Utilizatori (Protejat)
+- `GET /api/users/students` — Listă studenți
+- `GET /api/users/professors` — Listă profesori
+- `GET /api/users/me` — Profil utilizator curent
 
-### Users Table (Sequelize Model)
-- id: SERIAL PRIMARY KEY
-- email: VARCHAR(255) UNIQUE NOT NULL
-- password: VARCHAR(255) (bcrypt hash)
-- name: VARCHAR(255) NOT NULL
-- user_type: ENUM('student', 'profesor')
-- student_details: JSONB
-- professor_details: JSONB
-- is_verified: BOOLEAN DEFAULT false
-- profile_complete: BOOLEAN DEFAULT false
-- created_at, updated_at: TIMESTAMPS
+## 🧩 Schema Bazei de Date PostgreSQL
 
-## ��� Azure Deployment
+### Tabelul Users
 
-Ready for Azure cloud deployment:
-- **Azure Database for PostgreSQL**: Database hosting
-- **Azure App Service**: Backend API
-- **Azure Static Web Apps**: Frontend hosting
-- **Estimated cost**: ~$13-15/month
+| Coloană | Tip | Descriere |
+|---------|-----|-----------|
+| `id` | SERIAL | Cheie primară |
+| `email` | VARCHAR | Unic, obligatoriu |
+| `password` | VARCHAR | Parolă criptată |
+| `name` | VARCHAR | Obligatoriu |
+| `user_type` | ENUM | 'student' sau 'professor' |
+| `student_details` | JSONB | Detalii suplimentare student |
+| `professor_details` | JSONB | Detalii suplimentare profesor |
+| `is_verified` | BOOLEAN | Implicit false |
+| `profile_complete` | BOOLEAN | Implicit false |
+| `created_at` | TIMESTAMP | Data creării |
+| `updated_at` | TIMESTAMP | Data ultimei actualizări |
 
-See `deployment/AZURE_DEPLOYMENT_GUIDE.md` for complete instructions.
+## ☁️ Deploy pe Microsoft Azure
 
-## ���️ Technology Stack
+### Componente folosite:
+- **Azure Database for PostgreSQL**
+- **Azure App Service** pentru backend
+- **Azure Static Web Apps** pentru frontend
+
+
+
+## 🧰 Stack Tehnologic
 
 ### Backend
-- Node.js 18 + Express.js
-- PostgreSQL 15 + Sequelize ORM
-- JWT Authentication + bcrypt
+- Node.js 18, Express.js
+- PostgreSQL + Sequelize
+- JWT + bcrypt
 - express-validator
 
-### Frontend  
+### Frontend
 - React 18 + React Router v6
-- Axios HTTP client
-- React Context (state management)
-- CSS3 responsive design
+- Axios
+- React Context
+- CSS responsive
 
-### Cloud
-- Microsoft Azure
-- Azure Database for PostgreSQL
-- Azure App Service
-- Azure Static Web Apps
+## 📌 Status Proiect
 
-## ��� Status
+### ✅ Finalizat
+- ✔️ Migrare completă PostgreSQL
+- ✔️ Sistem de autentificare
+- ✔️ Validarea domeniului email
+- ✔️ Dashboard cu roluri
+- ✔️ Configurație pentru Azure
 
-### ✅ Completed
-- [x] PostgreSQL migration from MongoDB
-- [x] User authentication system
-- [x] Email domain validation
-- [x] Role-based dashboards
-- [x] Azure deployment config
-- [x] Production ready
+### 🚧 În dezvoltare
+- ⏳ Gestiune teme de disertație
+- ⏳ Depunerea temelor
+- ⏳ Upload fișiere
+- ⏳ Notificări email
 
-### ��� Future Features
-- [ ] Dissertation topic management
-- [ ] Application submissions
-- [ ] File upload system
-- [ ] Email notifications
+## 🧪 Testare
 
-## ��� Migration Notes
+Poți testa înregistrarea cu email educațional:
+- **Student**: `test@stud.ase.ro`
+- **Profesor**: `prof@ase.ro`
 
-**Successfully migrated from MongoDB/Mongoose to PostgreSQL/Sequelize:**
-- ✅ Replaced all Mongoose models with Sequelize
-- ✅ Updated database queries and connections
-- ✅ Maintained all existing functionality
-- ✅ Added proper constraints and indexing
-- ✅ Environment configuration updated
-
-## ��� Testing
-
-Register with educational emails to test:
-- Student: test@stud.ase.ro
-- Professor: prof@ase.ro
-
-## ��� Support
-
-For issues or questions, contact your academic advisor.
-
----
-
-**��� Production Ready!** PostgreSQL ✅ | JWT Auth ✅ | Azure Ready ✅
-
+**🚀 Gata de producție!** PostgreSQL ✔️ | JWT Auth ✔️ | Azure ✔️
