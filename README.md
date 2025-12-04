@@ -1,109 +1,177 @@
-# 📘 Aplicație Web pentru Gestionarea Cererilor de Disertație
+# ��� Dissertation Registration System - PostgreSQL
 
-Această aplicație web permite gestionarea procesului de înscriere la disertație, facilitând interacțiunea dintre **studenți** și **profesori** în cadrul sesiunilor de înscriere. Platforma este implementată ca **Single Page Application (SPA)** și include funcționalități de autentificare, administrare a sesiunilor, trimiterea și procesarea cererilor, precum și upload/download de documente.
+A complete web application for student and teacher dissertation registration with email domain validation, built with **React** frontend and **Node.js + PostgreSQL** backend.
 
-## 🚀 Funcționalități principale
+## ✅ Key Features
 
-### 👨‍🎓 Pentru Studenți:
+### ��� Authentication & Authorization
+- **Email Domain Validation**: Automatic user type detection based on educational email domains
+- **Secure Registration**: Password hashing with bcrypt
+- **JWT Authentication**: Token-based session management
+- **Role-Based Access**: Student and Professor dashboards
+- **Protected Routes**: Authentication-required pages
 
-- Vizualizarea sesiunilor de înscriere disponibile
-- Trimiterea de cereri preliminare către profesori
-- Posibilitatea de a trimite cereri către mai mulți profesori
-- Upload de fișiere după aprobarea cererii (cerere semnată)
-- Reîncărcarea fișierului în caz de respingere
-- Vizualizarea statusului cererilor: **Trimisă**, **Aprobată**, **Respinsă**, **Fișier încărcat**
+### ��� Database & Backend
+- **PostgreSQL Database**: Modern, scalable relational database with Sequelize ORM
+- **RESTful API**: Clean, documented API endpoints
+- **Input Validation**: Comprehensive request validation with express-validator
+- **Error Handling**: Graceful error responses
+- **Production Ready**: Azure deployment configured
 
-### 👨‍🏫 Pentru Profesori:
+### ��� Frontend
+- **React 18**: Modern React with hooks and context
+- **Responsive Design**: Mobile-first UI
+- **Real-time Validation**: Instant feedback on forms
+- **Dashboard System**: Role-specific interfaces
+- **API Integration**: Axios-based API communication
 
-- Crearea, editarea și ștergerea sesiunilor de înscriere
-- Gestionarea cererilor primite
-- Aprobare sau respingere (cu justificare) în limita numărului prestabilit de locuri
-- Upload de fișier ca răspuns final la cererea studentului
-- Validare automată a suprapunerilor între sesiuni
+## ��� Quick Start
 
----
+### Prerequisites
+- Node.js 18+
+- PostgreSQL 15+
+- npm or yarn
 
-## 📂 Structura proiectului
-
-#### 🔧 Coming Soon...
-
-## 🛠️ Tehnologii
-
-- **Frontend**: React
-- **Backend**: Node.js
-- **Bază de date**: PostgreSQL / MySQL
-- **Autentificare**: JWT
-- **Stocare fișiere**: cloud (AWS)
-- **Containerizare**: Docker
-
----
-
-## 🔧 Instalare & Rulare
-
-**Structură proiect:**
-
-- `backend/` - server Express + MongoDB
-- `dissertation-registration/` - aplicație SPA client (React)
-
-**1. Instalare dependențe**
-
-- Backend:
-
-```
+### 1. Backend Setup
+```bash
 cd backend
 npm install
+
+# Create .env file with PostgreSQL config
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=dissertation_registration_dev
+DB_USERNAME=postgres
+DB_PASSWORD=your-password
+JWT_SECRET=your-super-secure-jwt-secret
+PORT=5000
+FRONTEND_URL=http://localhost:3000
+
+npm start
 ```
 
-- Frontend:
-
-```
+### 2. Frontend Setup
+```bash
 cd dissertation-registration
 npm install
-```
 
-**2. Configurare variabile de mediu**
+# Create .env file
+echo "REACT_APP_API_URL=http://localhost:5000" > .env
 
-- Creează un fișier `.env` în `backend/` :
-
-```
-# Exemplu backend/.env
-PORT=5000
-MONGO_URI=mongodb+srv://<USERNAME>:<PASSWORD>@<CLUSTER>.mongodb.net/<DB_NAME>?retryWrites=true&w=majority
-JWT_SECRET=secretul_meu_super_sigur_pentru_licenta
-
-# sau folosește variabile separate (dacă codul suportă):
-# user=<USERNAME>
-# password=<PASSWORD>
-# DB_NAME=<DB_NAME>
-```
-
-- Înlocuiește `<USERNAME>`, `<PASSWORD>`, `<CLUSTER>` și `<DB_NAME>` cu valorile tale.
-- Dacă folosești caractere speciale în parolă, escape/URL-encode-le corespunzător.
-
-**3. Pornire backend**
-
-- În folderul `backend`:
-
-```
 npm start
 ```
 
-**4. Pornire frontend**
+### 3. Access Application
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- Health Check: http://localhost:5000/api/health
 
-- În folderul `dissertation-registration`:
+## ��� Email Domain Validation
 
-```
-npm start
-```
+### Student Domains
+- @stud.ase.ro, @student.ase.ro (ASE)
+- @student.upt.ro (UPT), @student.utcluj.ro (UTC)
+- @stud.ubbcluj.ro (UBB), @student.upb.ro (UPB)
 
-**6. Probleme frecvente și soluții**
+### Professor Domains  
+- @ase.ro, @ie.ase.ro (ASE)
+- @upt.ro (UPT), @utcluj.ro (UTC)
+- @ubbcluj.ro (UBB), @upb.ro (UPB)
 
-- `bad auth : authentication failed`:
-  - Verifică `MONGO_URI` (username/password corecte).
-  - Verifică că userul are permisiunea pe DB.
-  - În MongoDB Atlas, adaugă IP-ul tău în Network Access (sau 0.0.0.0/0 pentru dezvoltare).
-- `Port already in use`:
-  - Schimbă `PORT` în `backend/.env` sau oprește procesul care ocupă portul.
-  - Poți vedea procesul cu `lsof -i :3000` și opri cu `kill <PID>`.
-- `Module type` / ESM warning:
-  - Dacă vezi avertisment legat de module, verifică `package.json` și setarea `"type": "module"` dacă folosești `import`.
+## ��� API Endpoints
+
+### Authentication
+- POST /api/auth/register - User registration
+- POST /api/auth/login - User login
+- GET /api/auth/verify - Token validation
+- GET /api/auth/profile - User profile
+- PUT /api/auth/complete-profile - Profile completion
+
+### Users
+- GET /api/users/students - All students (protected)
+- GET /api/users/professors - All professors (protected)
+- GET /api/users/me - Current user (protected)
+
+## ���️ PostgreSQL Database
+
+### Users Table (Sequelize Model)
+- id: SERIAL PRIMARY KEY
+- email: VARCHAR(255) UNIQUE NOT NULL
+- password: VARCHAR(255) (bcrypt hash)
+- name: VARCHAR(255) NOT NULL
+- user_type: ENUM('student', 'profesor')
+- student_details: JSONB
+- professor_details: JSONB
+- is_verified: BOOLEAN DEFAULT false
+- profile_complete: BOOLEAN DEFAULT false
+- created_at, updated_at: TIMESTAMPS
+
+## ��� Azure Deployment
+
+Ready for Azure cloud deployment:
+- **Azure Database for PostgreSQL**: Database hosting
+- **Azure App Service**: Backend API
+- **Azure Static Web Apps**: Frontend hosting
+- **Estimated cost**: ~$13-15/month
+
+See `deployment/AZURE_DEPLOYMENT_GUIDE.md` for complete instructions.
+
+## ���️ Technology Stack
+
+### Backend
+- Node.js 18 + Express.js
+- PostgreSQL 15 + Sequelize ORM
+- JWT Authentication + bcrypt
+- express-validator
+
+### Frontend  
+- React 18 + React Router v6
+- Axios HTTP client
+- React Context (state management)
+- CSS3 responsive design
+
+### Cloud
+- Microsoft Azure
+- Azure Database for PostgreSQL
+- Azure App Service
+- Azure Static Web Apps
+
+## ��� Status
+
+### ✅ Completed
+- [x] PostgreSQL migration from MongoDB
+- [x] User authentication system
+- [x] Email domain validation
+- [x] Role-based dashboards
+- [x] Azure deployment config
+- [x] Production ready
+
+### ��� Future Features
+- [ ] Dissertation topic management
+- [ ] Application submissions
+- [ ] File upload system
+- [ ] Email notifications
+
+## ��� Migration Notes
+
+**Successfully migrated from MongoDB/Mongoose to PostgreSQL/Sequelize:**
+- ✅ Replaced all Mongoose models with Sequelize
+- ✅ Updated database queries and connections
+- ✅ Maintained all existing functionality
+- ✅ Added proper constraints and indexing
+- ✅ Environment configuration updated
+
+## ��� Testing
+
+Register with educational emails to test:
+- Student: test@stud.ase.ro
+- Professor: prof@ase.ro
+
+## ��� Support
+
+For issues or questions, contact your academic advisor.
+
+---
+
+**��� Production Ready!** PostgreSQL ✅ | JWT Auth ✅ | Azure Ready ✅
+

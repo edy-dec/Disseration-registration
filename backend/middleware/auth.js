@@ -17,8 +17,7 @@ export const authenticate = async (req, res, next) => {
  
     const decoded = verifyToken(token);
     
-    
-    const user = await User.findById(decoded.id);
+      const user = await User.findByPk(decoded.id); // Sequelize folosește findByPk în loc de findById
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -43,10 +42,9 @@ export const authenticate = async (req, res, next) => {
 export const optionalAuth = async (req, res, next) => {
   try {
     const token = extractTokenFromHeader(req.headers.authorization);
-    
-    if (token) {
+      if (token) {
       const decoded = verifyToken(token);
-      const user = await User.findById(decoded.id);
+      const user = await User.findByPk(decoded.id); // Sequelize folosește findByPk în loc de findById
       
       if (user) {
         req.user = user;

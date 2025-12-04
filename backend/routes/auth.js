@@ -20,9 +20,9 @@ router.post(
   checkValidation,
   async (req, res) => {
     try {
-      const { email, password, name } = req.body;
-
-      const existingUser = await User.findOne({ email: email.toLowerCase() });
+      const { email, password, name } = req.body;      const existingUser = await User.findOne({ 
+        where: { email: email.toLowerCase() } 
+      });
       if (existingUser) {
         return res.status(400).json({
           success: false,
@@ -35,28 +35,21 @@ router.post(
       if (!emailValidation.isValid) {
         return res.status(400).json({
           success: false,
-          message: "Email-ul trebuie sa fie de la o universitate acceptata",
-        });
+          message: "Email-ul trebuie sa fie de la o universitate acceptata",        });
       }
 
-      // Hash parola
-      const saltRounds = 12;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-      // Creeaza utilizatorul
-      const user = new User({
+      // Creează utilizatorul
+      const user = await User.create({
         email: email.toLowerCase(),
-        password: hashedPassword,
+        password, // Parola va fi hash-uita automat prin hook-ul beforeSave
         name,
         userType: emailValidation.userType,
         provider: "local",
       });
 
-      await user.save();
-
       // Genereaza token JWT
       const token = generateToken({
-        id: user._id,
+        id: user.id, // Sequelize folosește id în loc de _id
         email: user.email,
         userType: user.userType,
         profileComplete: user.profileComplete,
@@ -82,10 +75,10 @@ router.post(
 // POST /api/auth/login - Login clasic
 router.post("/login", validateLogin, checkValidation, async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    // Cauta utilizatorul
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const { email, password } = req.body;    // Cauta utilizatorul
+    const user = await User.findOne({ 
+      where: { email: email.toLowerCase() } 
+    });
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -107,11 +100,9 @@ router.post("/login", validateLogin, checkValidation, async (req, res) => {
         success: false,
         message: "Email sau parola incorecta",
       });
-    }
-
-    // Genereaza token JWT
+    }    // Genereaza token JWT
     const token = generateToken({
-      id: user._id,
+      id: user.id, // Sequelize folosește id în loc de _id
       email: user.email,
       userType: user.userType,
       profileComplete: user.profileComplete,
@@ -201,13 +192,11 @@ router.put("/complete-profile", authenticate, async (req, res) => {
         researchAreas,
         bio: bio || "",
       };
-    }
-
-    user.profileComplete = true;
+    }    user.profileComplete = true;
     await user.save();
 
     const token = generateToken({
-      id: user._id,
+      id: user.id, // Sequelize folosește id în loc de _id
       email: user.email,
       userType: user.userType,
       profileComplete: user.profileComplete,
