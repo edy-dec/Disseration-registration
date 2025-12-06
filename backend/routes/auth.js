@@ -20,8 +20,9 @@ router.post(
   checkValidation,
   async (req, res) => {
     try {
-      const { email, password, name } = req.body;      const existingUser = await User.findOne({ 
-        where: { email: email.toLowerCase() } 
+      const { email, password, name } = req.body;
+      const existingUser = await User.findOne({
+        where: { email: email.toLowerCase() },
       });
       if (existingUser) {
         return res.status(400).json({
@@ -35,10 +36,11 @@ router.post(
       if (!emailValidation.isValid) {
         return res.status(400).json({
           success: false,
-          message: "Email-ul trebuie sa fie de la o universitate acceptata",        });
+          message: "Email-ul trebuie sa fie de la o universitate acceptata",
+        });
       }
 
-      // Creează utilizatorul
+      // Creeaza utilizatorul
       const user = await User.create({
         email: email.toLowerCase(),
         password, // Parola va fi hash-uita automat prin hook-ul beforeSave
@@ -75,9 +77,9 @@ router.post(
 // POST /api/auth/login - Login clasic
 router.post("/login", validateLogin, checkValidation, async (req, res) => {
   try {
-    const { email, password } = req.body;    // Cauta utilizatorul
-    const user = await User.findOne({ 
-      where: { email: email.toLowerCase() } 
+    const { email, password } = req.body; // Cauta utilizatorul
+    const user = await User.findOne({
+      where: { email: email.toLowerCase() },
     });
     if (!user) {
       return res.status(401).json({
@@ -100,7 +102,7 @@ router.post("/login", validateLogin, checkValidation, async (req, res) => {
         success: false,
         message: "Email sau parola incorecta",
       });
-    }    // Genereaza token JWT
+    } // Genereaza token JWT
     const token = generateToken({
       id: user.id, // Sequelize folosește id în loc de _id
       email: user.email,
@@ -192,7 +194,8 @@ router.put("/complete-profile", authenticate, async (req, res) => {
         researchAreas,
         bio: bio || "",
       };
-    }    user.profileComplete = true;
+    }
+    user.profileComplete = true;
     await user.save();
 
     const token = generateToken({
@@ -221,8 +224,7 @@ router.put("/complete-profile", authenticate, async (req, res) => {
 // POST /api/auth/logout (daca e sa fie, pentru invalidarea token-ului pe server)
 router.post("/logout", authenticate, async (req, res) => {
   try {
-    // În implementarea actuala, logout-ul se face pe frontend prin stergerea token-ului
-    // Aici putem adauga logica pentru blacklist-ul token-urilor daca e necesar
+    // implementarea actuala logout ul se face pe frontend prin stergerea token ului
 
     res.json({
       success: true,
