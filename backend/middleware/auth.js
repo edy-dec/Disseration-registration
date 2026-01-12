@@ -1,60 +1,54 @@
-import { verifyToken, extractTokenFromHeader } from '../utils/jwt.js';
-import User from '../models/User.js';
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../config/config");
 
+/**
+ * Middleware to verify JWT token
+ * Extracts user information from token and attaches to request
+ */
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
 
-export const authenticate = async (req, res, next) => {
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
   try {
-    
-    const token = extractTokenFromHeader(req.headers.authorization);
-    
-    if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: 'Token de acces lipsă'
-      });
-    }
-    
- 
-    const decoded = verifyToken(token);
-    
-      const user = await User.findByPk(decoded.id); // Sequelize folosește findByPk în loc de findById
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Utilizator nu a fost găsit'
-      });
-    }
-    
-    
-    req.user = user;
-    req.token = token;
-    
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.id;
+    req.userRole = decoded.role;
+    req.userEmail = decoded.email;
     next();
   } catch (error) {
-    return res.status(401).json({
-      success: false,
-      message: error.message || 'Token invalid'
-    });
+    return res.status(401).json({ error: "Invalid token" });
   }
 };
 
-
-export const optionalAuth = async (req, res, next) => {
-  try {
-    const token = extractTokenFromHeader(req.headers.authorization);
-      if (token) {
-      const decoded = verifyToken(token);
-      const user = await User.findByPk(decoded.id); // Sequelize folosește findByPk în loc de findById
-      
-      if (user) {
-        req.user = user;
-        req.token = token;
-      }
-    }
-    
-    next();
-  } catch (error) {
-    // in cazul optionalAuth, continuam chiar dacă token-ul e invalid
-    next();
+/**
+ * Middleware to check if user is a professor
+ */
+const isProfessor = (req, res, next) => {
+  if (req.userRole !== "professor") {
+    return res
+      .status(403)
+      .json({ error: "Access denied. Professor role required." });
   }
+  next();
+};
+
+/**
+ * Middleware to check if user is a student
+ */
+const isStudent = (req, res, next) => {
+  if (req.userRole !== "student") {
+    return res
+      .status(403)
+      .json({ error: "Access denied. Student role required." });
+  }
+  next();
+};
+
+module.exports = {
+  verifyToken,
+  isProfessor,
+  isStudent,
 };
