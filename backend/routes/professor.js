@@ -26,12 +26,12 @@ router.post("/sessions", verifyToken, isProfessor, async (req, res) => {
       return res.status(400).json({ error: "Start date must be before end date" });
     }
 
-    // Restricție: profesorul poate avea doar o singură sesiune
+    // Restricție: profesorul poate avea doar o singură sesiune, indiferent de dată
     const existingSession = await RegistrationSession.findOne({
       where: { professorId: req.userId }
     });
     if (existingSession) {
-      return res.status(400).json({ error: "Profesorul are deja o sesiune. Nu se poate crea alta." });
+      return res.status(400).json({ error: "Profesorul are deja o sesiune (indiferent de dată). Nu se poate crea alta." });
     }
 
     // Creează sesiunea
