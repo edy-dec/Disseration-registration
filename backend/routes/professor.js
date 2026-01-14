@@ -26,9 +26,15 @@ router.post("/sessions", verifyToken, isProfessor, async (req, res) => {
       return res.status(400).json({ error: "Start date must be before end date" });
     }
 
-    // Note: Overlapping sessions are now allowed for the same professor
+    // Restricție: profesorul poate avea doar o singură sesiune
+    const existingSession = await RegistrationSession.findOne({
+      where: { professorId: req.userId }
+    });
+    if (existingSession) {
+      return res.status(400).json({ error: "Profesorul are deja o sesiune. Nu se poate crea alta." });
+    }
 
-    // Create session
+    // Creează sesiunea
     const session = await RegistrationSession.create({
       professorId: req.userId,
       title,
