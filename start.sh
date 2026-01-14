@@ -14,6 +14,7 @@ echo -e "${BLUE}========================================${NC}"
 echo -e "\n${GREEN}Starting Backend Server...${NC}"
 cd backend
 npm install > /dev/null 2>&1
+npm rebuild sqlite3 --build-from-source
 if [ ! -f .env ]; then
     cp .env.example .env
     echo ".env file created (update with your settings)"
