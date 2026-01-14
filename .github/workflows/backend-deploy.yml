@@ -28,6 +28,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'dissertation-backend-api-dpdmgefpa4f0e6g3'
+          app-name: 'dissertation-backend-2026'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./backend
