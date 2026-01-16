@@ -1,315 +1,169 @@
 # Dissertation Registration Web Application
 
-A web application for managing dissertation registration requests between students and professors.
+O aplicație web pentru managementul solicitărilor de înscriere la disertație între studenți și profesori.
 
-## Features
+## Deploy Live
 
-### Student Features
+- [Aplicația pe Render](https://disseration-registration-1.onrender.com)
 
-- Register/Login to account
-- Browse available registration sessions
-- Submit preliminary dissertation requests to professors
-- Track the status of submitted requests
-- View approval/rejection reasons
+## Funcționalități principale
 
-### Professor Features
+### Pentru studenți
+- Înregistrare/Autentificare
+- Vizualizare sesiuni de înscriere disponibile
+- Trimitere cereri de disertație către profesori
+- Urmărire status cereri (aprobat/respins + motiv)
+- Vizualizare motive de respingere
 
-- Register/Login to account
-- Create and manage registration sessions with time constraints
-- Review student requests
-- Approve requests (with student limit per session)
-- Reject requests with justification
+### Pentru profesori
+- Înregistrare/Autentificare
+- Creare și gestionare sesiuni de înscriere (perioade, nr. maxim studenți)
+- Revizuire cereri ale studenților
+- Aprobare cereri (în limita locurilor)
+- Respingere cereri cu motiv
 
-## Architecture
+## Tehnologii folosite
 
-### Technology Stack
-
-- **Frontend**: React 19 + Vite + React Router
+- **Frontend**: React 19, Vite, React Router
 - **Backend**: Express.js (Node.js)
-- **Database**: SQLite with Sequelize ORM
-- **Authentication**: JWT (JSON Web Tokens)
-- **API**: RESTful
+- **Bază de date**: PostgreSQL (gestionat prin Sequelize ORM)
+- **Autentificare**: JWT
+- **API**: REST
 
-### Project Structure
+> **Notă:** Începând cu 2026, aplicația folosește **PostgreSQL** ca stocare, nu SQLite!  
+> Setările pentru conectare la Postgres se configurează în fișierul `.env` după modelul `backend/.env.example`.
+
+---
+
+## Structură proiect
 
 ```
 ├── backend/
-│   ├── config/          # Configuration files
-│   ├── middleware/      # Express middleware (authentication)
-│   ├── models/          # Sequelize models
-│   ├── routes/          # API routes
-│   ├── uploads/         # File upload directory
-│   └── server.js        # Main server entry point
+│   ├── config/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── uploads/
+│   └── server.js
 ├── frontend/
 │   ├── src/
-│   │   ├── components/  # React components
-│   │   ├── pages/       # Page components
-│   │   ├── context/     # React context (Auth)
-│   │   ├── styles/      # CSS files
-│   │   ├── utils/       # API utilities
-│   │   ├── App.jsx      # Main App component
-│   │   └── main.jsx     # Entry point
-│   └── vite.config.js   # Vite configuration
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── context/
+│   │   ├── styles/
+│   │   ├── utils/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── vite.config.js
 ```
 
-## Database Schema
+---
 
-### Users
+## Instructiuni rapide de instalare locală
 
-- `id` (INT, PK)
-- `email` (VARCHAR, UNIQUE)
-- `password` (VARCHAR, hashed)
-- `firstName` (VARCHAR)
-- `lastName` (VARCHAR)
-- `role` (ENUM: 'student', 'professor')
-- `createdAt`, `updatedAt` (DATETIME)
-
-### RegistrationSessions
-
-- `id` (INT, PK)
-- `professorId` (INT, FK -> Users)
-- `title` (VARCHAR)
-- `description` (TEXT)
-- `startDate` (DATETIME)
-- `endDate` (DATETIME)
-- `maxStudents` (INT, default 5)
-- `isActive` (BOOLEAN)
-- `createdAt`, `updatedAt` (DATETIME)
-
-### DissertationRequests
-
-- `id` (INT, PK)
-- `sessionId` (INT, FK -> RegistrationSessions)
-- `studentId` (INT, FK -> Users)
-- `professorId` (INT, FK -> Users)
-- `status` (ENUM: 'pending', 'approved', 'rejected')
-- `rejectionReason` (TEXT, nullable)
-- `dissertationTitle` (VARCHAR)
-- `preliminaryRequestFile` (VARCHAR, file path)
-- `signedCoordinationRequestFile` (VARCHAR, file path)
-- `professorReviewFile` (VARCHAR, file path)
-- `createdAt`, `updatedAt` (DATETIME)
-
-## Business Logic
-
-1. **Session Management**: Professors can create registration sessions that cannot temporally overlap.
-
-2. **Request Workflow**:
-
-   - Student submits a preliminary request during an active session
-   - Professor approves/rejects the request
-   - If approved, professor provides student slots (limited by maxStudents)
-   - Student cannot be approved by multiple professors simultaneously
-
-3. **Validation**:
-   - Sessions must have end date after start date
-   - No overlapping sessions per professor
-   - Session must be active (current time between startDate and endDate)
-   - Student can only have one pending request per session
-   - Student cannot be approved by multiple professors
-
-## Installation & Setup
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm
-
-### Backend Setup
-
-1. Navigate to the backend directory:
-
-   ```bash
-   cd backend
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-3. Create `.env` file (copy from `.env.example`):
-
-   ```bash
-   cp .env.example .env
-   ```
-
-4. Update `.env` with your configuration:
-
-   ```
-   PORT=8080
-   NODE_ENV=development
-   JWT_SECRET=your_secret_key_here
-   ```
-
-5. Start the backend server:
-   ```bash
-   npm run dev
-   ```
-
-The backend will be available at `http://localhost:8080`
-
-### Frontend Setup
-
-1. Navigate to the frontend directory:
-
-   ```bash
-   cd frontend
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-3. Create `.env.local` file (copy from `.env.example`):
-
-   ```bash
-   cp .env.example .env.local
-   ```
-
-4. Update `.env.local` with backend URL:
-
-   ```
-   VITE_API_URL=http://localhost:8080/api
-   ```
-
-5. Start the frontend dev server:
-   ```bash
-   npm run dev
-   ```
-
-The frontend will be available at `http://localhost:5173`
-
-## API Endpoints
-
-### Authentication
-
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login user
-
-### Student Routes (Protected)
-
-- `GET /api/student/sessions` - Get available active sessions
-- `GET /api/student/requests` - Get all student requests
-- `POST /api/student/requests` - Submit new request
-- `GET /api/student/requests/:id` - Get specific request details
-
-### Professor Routes (Protected)
-
-- `GET /api/professor/sessions` - Get professor's sessions
-- `POST /api/professor/sessions` - Create new session
-- `GET /api/professor/sessions/:sessionId/requests` - Get session requests
-- `PUT /api/professor/requests/:requestId/approve` - Approve request
-- `PUT /api/professor/requests/:requestId/reject` - Reject request
-
-## Usage
-
-### As a Student
-
-1. Register an account with role "student"
-2. View available sessions during their active periods
-3. Submit requests to professors
-4. Track request status in "My Requests" tab
-
-### As a Professor
-
-1. Register an account with role "professor"
-2. Create registration sessions with time boundaries and student limits
-3. Review pending student requests
-4. Approve requests (up to maxStudents limit) or reject with reason
-
-## Build for Production
-
-### Backend
+### 1. Backend (Express + PostgreSQL)
 
 ```bash
 cd backend
 npm install
-npm start  # Runs without nodemon
+cp .env.example .env
+# Editați .env cu valorile PostgreSQL (vezi exemple mai jos)
+npm run dev
 ```
 
-### Frontend
+#### Exemplu .env pentru Postgres local:
+
+```
+PORT=8080
+NODE_ENV=development
+JWT_SECRET=alege_un_secret
+DB_DIALECT=postgres
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=dissertation_db
+DB_USER=postgres
+DB_PASS=postgres
+```
+
+Puteți folosi și o conexiune completă, de ex:
+```
+DATABASE_URL=postgres://user:password@localhost:5432/dissertation_db
+DB_SSL=false
+```
+
+> **Atenție:** Baza de date trebuie creată deja în Postgres (`createdb dissertation_db`).
+
+---
+
+### 2. Frontend (React + Vite)
 
 ```bash
 cd frontend
 npm install
-npm run build  # Creates dist/ folder
-npm run preview  # Preview production build locally
+cp .env.example .env.local
+# Optional: modificați adresa backendului în .env.local, ex:
+# VITE_API_URL=http://localhost:8080/api
+npm run dev
 ```
 
-## Deployment
-
-### Option 1: Heroku
-
-```bash
-git push heroku main
-```
-
-### Option 2: Vercel (Frontend Only)
-
-```bash
-vercel
-```
-
-### Option 3: AWS / Azure / Google Cloud
-
-Follow platform-specific deployment guides.
-
-## Testing
-
-### Manual Testing Workflow
-
-1. **Register two users**:
-
-   - One as professor
-   - One as student
-
-2. **Professor creates session**:
-
-   - Set start/end dates (current time)
-   - Set max students to 2
-
-3. **Student submits request**:
-
-   - Select active session
-   - Enter dissertation title
-   - Submit
-
-4. **Professor reviews and approves**:
-
-   - Check request in session
-   - Approve or reject
-
-5. **Student verifies status**:
-   - Check "My Requests" for update
-
-## Future Enhancements
-
-- File upload for signed documents
-- Email notifications
-- Student evaluation scoring
-- Advanced filtering and search
-- Dashboard analytics
-- Two-factor authentication
-- Role-based permissions refinement
-
-## Contributing
-
-1. Create a feature branch
-2. Make changes with clear commit messages
-3. Submit pull request
-
-## License
-
-Project for educational purposes.
-
-## Support
-
-For issues or questions, contact the development team.
+Acces: http://localhost:5173
 
 ---
 
-**Last Updated**: January 2026
+### 3. Pornire rapidă cu script:
+```bash
+chmod +x start.sh
+./start.sh
+```
+Acesta pornește automat backend + frontend (vedeți loguri în terminal).
+
+---
+
+## Workflow Demo
+
+1. **Profesor**: creează o sesiune nouă (titlu, descriere, dată de început/sfârșit, nr. maxim studenți)
+2. **Student**: se autentifică, vede sesiuni active și trimite cerere
+3. **Profesor**: aprovă sau respinge cereri, oferă motiv la respingere
+4. **Student**: verifică status cereri în tab-ul "My Requests"
+
+### Conturi Demo (după creare):
+
+**Profesor**
+- Email: prof@university.edu
+- Parolă: password123
+
+**Student**
+- Email: student@university.edu
+- Parolă: password123
+
+sau  
+- prof@test.com / test123  
+- student@test.com / test123
+
+---
+
+## Troubleshooting uzual
+
+- **Port 8080 ocupat:**  
+  `lsof -i :8080 | grep -v COMMAND | awk '{print $2}' | xargs kill -9`
+- **Port 5173 ocupat:**  
+  `lsof -i :5173 | grep -v COMMAND | awk '{print $2}' | xargs kill -9`
+- **Migrare problemă sau reset DB:**  
+  - Asigurați-vă că aveți un server PostgreSQL activ și creați DB dacă e nevoie
+- **Dependențe:**  
+  `rm -rf node_modules package-lock.json && npm install`
+
+## Test cURL API
+
+Exemple în README.md pentru `/api/auth/register` și `/api/auth/login`.
+
+---
+
+## Linkuri utile
+
+- Repo pe GitHub: [edy-dec/Disseration-registration](https://github.com/edy-dec/Disseration-registration)
+- Aplicație LIVE (Render): [https://disseration-registration-1.onrender.com](https://disseration-registration-1.onrender.com)
+
+---
+
+> Pentru detalii suplimentare, consultați documentația din repo (`README.md`, `PROJECT_STATUS.md`, `QUICK_START.md`).
