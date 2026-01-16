@@ -36,6 +36,10 @@ app.use(cors({
     if (origin.includes('azurestaticapps.net')) {
       return callback(null, true);
     }
+    // Also allow any onrender.com domain
+    if (origin.includes('onrender.com')) {
+      return callback(null, true);
+    }
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true
